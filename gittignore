@@ -1,0 +1,7 @@
+--pycache--/
+*.pyc
+.vscode/
+scratch.py
+.venv/
+venv/
+logs/*.csv
