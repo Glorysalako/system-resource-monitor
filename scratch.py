@@ -1,6 +1,8 @@
 import monitor
 
-info = monitor.get_system_info()
-print(info)
+memory = monitor.get_memory_usage()
+print("Memory:", memory)
 
-monitor.display_system_info()
+print("Disk path:", monitor.get_disk_path())
+disk = monitor.get_disk_usage()
+print("Disk:", disk)
