@@ -1,6 +1,6 @@
 import monitor
 
-summary = monitor.get_resource_summary()
-print(summary)
+all_processes = monitor.get_top_processes(1000)
+print("Processes read successfully:", len(all_processes))
 
-monitor.display_resource_summary(summary)
+monitor.display_top_processes()

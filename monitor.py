@@ -28,7 +28,9 @@ THRESHOLDS = {
     "memory": 80,
     "disk": 80,
 }
-
+# How many seconds the live monitor waits between refreshes
+# TODO: Set this to 2 seconds.
+REFRESH_SECONDS = 2
 # -------------------------------------------------------------------
 # Part 4: System information
 # -------------------------------------------------------------------
@@ -285,3 +287,149 @@ def display_warnings(summary):
         # TODO: Loop through each warning in the list and print it.
         for warning in warnings:
             print(warning)
+
+# -------------------------------------------------------------------
+# Part 8: Live monitor
+# -------------------------------------------------------------------
+
+def clear_screen():
+    """
+    Clear the terminal window.
+    """
+
+    # os.name is "nt" on Windows
+    # TODO: Fill in the value of os.name on Windows,
+    #       and the Windows clear-screen command.
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def display_live_screen(summary):
+    """
+    Print one "frame" of the live monitor.
+    """
+
+    # TODO: Get the statuses dictionary for this summary.
+    statuses = get_statuses(summary)
+
+    print("=" * 30)
+    print("   TB System Resource Monitor")
+    print("=" * 30)
+    print()
+    print(f"CPU Usage:      {summary['cpu_percent']}%")
+    print(f"Memory Usage:   {summary['memory_percent']}%")
+
+    # TODO: Print the disk percent from the summary.
+    print(f"Disk Usage:     {summary['disk_percent']}%")
+    print()
+    print("Status:")
+    print(f"CPU:    {statuses['cpu']}")
+
+    # TODO: Print the memory and disk statuses.
+    print(f"Memory: {statuses['memory']}")
+    print(f"Disk:   {statuses['disk']}")
+    print()
+    print("Press Ctrl+C to stop monitoring.")
+
+try:
+    number = int(input("Enter a number: "))
+    print("You entered", number)
+except ValueError:
+    print("That was not a number!")
+
+def start_live_monitor():
+    """
+    Keep refreshing the screen until the user presses Ctrl+C.
+    """
+
+    try:
+        # TODO: Start a loop that runs forever.
+        while True:
+            # TODO: Gather a fresh resource summary.
+            summary = get_resource_summary()
+
+            clear_screen()
+
+            # TODO: Display this summary on the screen.
+            display_live_screen(summary)
+
+            # TODO: Wait REFRESH_SECONDS seconds before the next refresh.
+            time.sleep(REFRESH_SECONDS)
+
+    # TODO: Catch the exception raised when the user presses Ctrl+C.
+    except KeyboardInterrupt:
+        print()
+        print("Live monitor stopped. Returning to the menu...")
+
+
+# -------------------------------------------------------------------
+# Part 9: Top processes
+# -------------------------------------------------------------------
+
+def get_memory_value(process_info):
+    """
+    Return the memory percent from one process dictionary.
+    Used as the "key" when sorting.
+    """
+
+    # TODO: Return the value stored under the "memory_percent" key.
+    return process_info["memory_percent"]
+
+def get_top_processes(limit=5):
+    """
+    Return a list of the processes using the most memory.
+    Each item in the list is a dictionary.
+    """
+
+    # TODO: Start with an empty list.
+    processes = []
+
+    # TODO: Loop over every running process using psutil.
+    for process in psutil.process_iter():
+        try:
+            process_info = {
+                # TODO: Fill in the attribute/methods from the table in Step 9.1.
+                "pid": process.pid,
+                "name": process.name(),
+                "memory_percent": process.memory_percent(),
+            }
+
+            # TODO: Add process_info to the end of the processes list.
+            processes.append(process_info)
+
+        # TODO: Catch the three psutil exceptions from Step 9.1.
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            # The process ended, or we are not allowed to read it.
+            # TODO: Skip this process and move on to the next one.
+            continue
+
+    # TODO: Sort by memory percent, largest first.
+    processes.sort(key=get_memory_value, reverse=True)
+
+    # TODO: Return only the first `limit` items.
+    return processes[:limit]
+
+def display_top_processes(limit=5):
+    """
+    Print the top processes in a table.
+    """
+
+    # TODO: Get the top processes, passing along limit.
+    top_processes = get_top_processes(limit)
+
+    print()
+    print("Top Processes by Memory")
+    print()
+    print(f"{'PID':<8} {'Name':<25} {'Memory':>8}")
+    print("-" * 43)
+
+    for process_info in top_processes:
+        # TODO: Read the pid and memory_percent from the dictionary.
+        pid = process_info["pid"]
+        name = process_info["name"][:25]
+        memory = process_info["memory_percent"]
+
+        print(f"{pid:<8} {name:<25} {memory:>7.1f}%")
+
+        
