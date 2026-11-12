@@ -1,8 +1,6 @@
 import monitor
 
-memory = monitor.get_memory_usage()
-print("Memory:", memory)
+summary = monitor.get_resource_summary()
+print(summary)
 
-print("Disk path:", monitor.get_disk_path())
-disk = monitor.get_disk_usage()
-print("Disk:", disk)
+monitor.display_resource_summary(summary)
