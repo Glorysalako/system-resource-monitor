@@ -1,6 +1,10 @@
 import monitor
+import logger
 
-all_processes = monitor.get_top_processes(1000)
-print("Processes read successfully:", len(all_processes))
+summary = monitor.get_resource_summary()
 
-monitor.display_top_processes()
+path = logger.save_snapshot(summary)
+print("Saved to:",path)
+
+path = logger.save_snapshot(summary)
+print("Saved again to:",path)

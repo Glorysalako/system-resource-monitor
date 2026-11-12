@@ -331,13 +331,6 @@ def display_live_screen(summary):
     print(f"Disk:   {statuses['disk']}")
     print()
     print("Press Ctrl+C to stop monitoring.")
-
-try:
-    number = int(input("Enter a number: "))
-    print("You entered", number)
-except ValueError:
-    print("That was not a number!")
-
 def start_live_monitor():
     """
     Keep refreshing the screen until the user presses Ctrl+C.
@@ -432,4 +425,3 @@ def display_top_processes(limit=5):
 
         print(f"{pid:<8} {name:<25} {memory:>7.1f}%")
 
-        
