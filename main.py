@@ -65,9 +65,8 @@ def save_current_snapshot():
         file_path = logger.save_snapshot(summary)
         print(f"Snapshot saved to: {file_path}")
 
-    except FileNotFoundError:
-        print("Sorry, the snapshot could not be saved.")
-        print("Make sure the CSV file is not open in another program.")
+    except OSError as error:
+        print(f"Sorry, the snapshot could not be saved: {error}")
 
 def main():
     """

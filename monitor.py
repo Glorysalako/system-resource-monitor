@@ -9,8 +9,6 @@ import os
 import platform
 import socket
 import time
-from webbrowser import get
-
 import psutil
 
 
@@ -26,7 +24,7 @@ BYTES_PER_GB = 1024 ** 3 # 1 GB = 1024^3 bytes
 THRESHOLDS = {
     "cpu": 80,
     "memory": 80,
-    "disk": 80,
+    "disk": 90,
 }
 # How many seconds the live monitor waits between refreshes
 # TODO: Set this to 2 seconds.
@@ -72,7 +70,7 @@ def display_system_info():
 
     print()
     print("System Information")
-    print("System Information" * 30)
+    print("-" * len("System Information"))
 
     # TODO: Fill in the dictionary keys from get_system_info().
     print(f"Operating System: {info['os_name']} {info['os_release']}")
@@ -91,7 +89,7 @@ def bytes_to_gb(num_bytes):
     """
 
     # TODO: Divide the number of bytes by the number of bytes in 1 GB.
-    gigabytes = 1073741824 / 1024 ** 3
+    gigabytes = num_bytes / BYTES_PER_GB
 
     # TODO: Round gigabytes to 2 decimal places.
     return round(gigabytes, 2)
@@ -424,4 +422,3 @@ def display_top_processes(limit=5):
         memory = process_info["memory_percent"]
 
         print(f"{pid:<8} {name:<25} {memory:>7.1f}%")
-
