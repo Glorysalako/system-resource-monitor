@@ -87,3 +87,29 @@ def save_snapshot(summary):
     # TODO: Return the path of the log file.
     return LOG_FILE
 
+def view_saved_snapshots():
+    """
+    Print the snapshots saved in the CSV log.
+    """
+
+    if not os.path.exists(LOG_FILE) or os.path.getsize(LOG_FILE) == 0:
+        print("No saved snapshots found.")
+        return
+
+    with open(LOG_FILE, newline="") as csv_file:
+        reader = csv.DictReader(csv_file)
+        snapshots = list(reader)
+
+    if not snapshots:
+        print("No saved snapshots found.")
+        return
+
+    print("\nSaved Snapshots")
+    print("-" * 72)
+    for snapshot in snapshots:
+        print(
+            f"{snapshot['timestamp']} | "
+            f"CPU: {snapshot['cpu_percent']}% | "
+            f"Memory: {snapshot['memory_percent']}% | "
+            f"Disk: {snapshot['disk_percent']}%"
+        )
